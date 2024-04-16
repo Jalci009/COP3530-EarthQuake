@@ -5,35 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Earthquake Map</title>
     <style>
-        #map 
-        {
-            height: 800px;
+        #map {
+            height: 600px;
             width: 100%;
         }
-        #controls 
-        {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            z-index: 1000; /* Make sure the slider appears above the map */
-            background: white;
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: 0 0 5px rgba(0,0,0,0.5);
+
+        #sliderContainer {
+            margin-top: 20px;
+            padding: 20px;
+            max-width: 600px; /* Set maximum width for the slider container */
+            margin: 0 auto; /* Center the slider container horizontally */
+        }
+
+        #yearSlider {
+            width: 100%; /* Make the slider span the entire container */
         }
     </style>
     <!-- Include Google Maps API with your API key -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBHBIIaxRnkkLvtY0mY1B8HmwNb91M9JcI&callback=initMap"
             async defer></script>
+    <!-- Include noUiSlider library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.js"></script>
     <!-- Include your custom JavaScript file -->
     <script src="script.js"></script>
 </head>
 <body>
-    <div id="controls">
-        <label for="yearSlider">Year: <span id="yearDisplay">1990</span></label>
-        <input type="range" id="yearSlider" min="1990" max="2004" value="1990">
-        <label>2004</label>
-    </div>
     <div id="map"></div>
+    <div id="sliderContainer">
+        <label for="yearSlider">Select Year Range:</label>
+        <div id="yearSlider"></div>
+        <div>Selected Range: <span id="yearRangeDisplay"></span></div>
+    </div>
 </body>
 </html>
