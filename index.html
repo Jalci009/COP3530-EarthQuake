@@ -5,9 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Earthquake Map</title>
     <style>
-        #map {
+        #map 
+        {
             height: 800px;
             width: 100%;
+        }
+        #controls 
+        {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 1000; /* Make sure the slider appears above the map */
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
         }
     </style>
     <!-- Include Google Maps API with your API key -->
@@ -17,6 +29,11 @@
     <script src="script.js"></script>
 </head>
 <body>
+    <div id="controls">
+        <label for="yearSlider">Year: <span id="yearDisplay">1990</span></label>
+        <input type="range" id="yearSlider" min="1990" max="2004" value="1990">
+        <label>2004</label>
+    </div>
     <div id="map"></div>
 </body>
 </html>
