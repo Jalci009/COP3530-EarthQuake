@@ -20,6 +20,19 @@
         #yearSlider {
             width: 100%; /* Make the slider span the entire container */
         }
+
+        #filter-controls {
+            margin-top: 20px; /* Or adjust based on layout */
+        }
+
+        #filter-controls label {
+            display: block; /* Each label on a new line */
+            cursor: pointer; /* Hand cursor on hover */
+        }
+
+        #filter-controls input {
+            margin-right: 5px; /* Space between checkbox and label text */
+        }
     </style>
     <!-- Include Google Maps API with your API key -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBHBIIaxRnkkLvtY0mY1B8HmwNb91M9JcI&callback=initMap"
@@ -36,6 +49,23 @@
         <label for="yearSlider">Select Year Range:</label>
         <div id="yearSlider"></div>
         <div>Selected Range: <span id="yearRangeDisplay"></span></div>
+    </div>
+    <div id="earthquakeCount">Number of Earthquakes: 0</div>
+    <div id="stateFilter">
+        <label for="stateInput">Enter State:</label>
+        <input type="text" id="stateInput" placeholder="Type a state name" />
+        <button id="stateSearchBtn">Search</button>
+    </div>
+    <div id="filter-controls">
+        <h4>Magnitude Filter</h4>
+        <label><input type="checkbox" class="magnitude-filter" value="2_2.9" checked> 2.0–2.9 Minor</label><br>
+        <label><input type="checkbox" class="magnitude-filter" value="3_3.9" checked> 3.0–3.9 Slight</label><br>
+        <label><input type="checkbox" class="magnitude-filter" value="4_4.9" checked> 4.0–4.9 Light</label><br>
+        <label><input type="checkbox" class="magnitude-filter" value="5_5.9" checked> 5.0–5.9 Moderate</label><br>
+        <label><input type="checkbox" class="magnitude-filter" value="6_6.9" checked> 6.0–6.9 Strong</label><br>
+        <label><input type="checkbox" class="magnitude-filter" value="7_7.9" checked> 7.0–7.9 Major</label><br>
+        <label><input type="checkbox" class="magnitude-filter" value="8_8.9" checked> 8.0–8.9 Great</label><br>
+        <label><input type="checkbox" class="magnitude-filter" value="9_9.9" checked> 9.0–9.9 Extreme</label><br>
     </div>
 </body>
 </html>
