@@ -34,6 +34,41 @@ main {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Legend Container */
+#legendContainer {
+    background-color: #333;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+/* Legend Title */
+#legendContainer h2 {
+    margin-top: 0;
+    color: #ffffff;
+}
+
+/* Legend Item */
+.legend-item {
+    margin-bottom: 10px;
+    color: #ccc;
+}
+
+/* Legend Marker (Color Box) */
+.legend-marker {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+/* Dark Mode Styles for Legend */
+.dark-mode #legendContainer {
+    background-color: #222;
+    color: #eee;
+}
+
 #mapContainer {
     flex: 2;
     max-width: calc(100% - 340px); /* Adjust width to fit remaining space */
