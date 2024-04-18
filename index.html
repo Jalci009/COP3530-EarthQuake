@@ -4,53 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Earthquake Map</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            text-align: center;
-        }
-
-        #map {
-            height: 650px;
-            width: 100%;
-        }
-
-        #container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        #filter-controls {
-            margin-top: -37px;
-            margin-bottom: 30px;
-            margin-right: -1100px;
-        }
-        
-        #countContainer {
-            margin-left: -1100px;
-            margin-top: -35px;
-        }
-
-        #tables {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: -120px;
-        }
-
-        /* Style each table */
-        #safestStatesTable,
-        #dangerousStatesTable {
-            border: 1px solid #ccc;
-            padding: 10px;
-            width: 100%;
-            margin-bottom: 20px; /* Optional: Add margin between tables */
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
     <!-- Include Google Maps API with your API key -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBHBIIaxRnkkLvtY0mY1B8HmwNb91M9JcI&callback=initMap"
             async defer></script>
@@ -60,30 +14,79 @@
     <!-- Include your custom JavaScript file -->
     <script src="script.js"></script>
 </head>
-<body>
-    <div id="map"></div>
-    <div id="container">
-        <div id="sliderContainer">
-            <label for="yearSlider">Select Year Range:</label>
-            <div id="yearSlider"></div>
-            <div>Selected Range: <span id="yearRangeDisplay"></span></div>
-        </div>
-        <div id="countContainer">
-            <div id="earthquakeCount">Number of Earthquakes: 0</div>
-        </div>
-        <div id="filter-controls">
-            <h4>Magnitude Filter</h4>
-            <label><input type="checkbox" class="magnitude-filter" value="2_2.9" checked> 2.0–2.9 Minor</label><br>
-            <label><input type="checkbox" class="magnitude-filter" value="3_3.9" checked> 3.0–3.9 Slight</label><br>
-            <label><input type="checkbox" class="magnitude-filter" value="4_4.9" checked> 4.0–4.9 Light</label><br>
-            <label><input type="checkbox" class="magnitude-filter" value="5_5.9" checked> 5.0–5.9 Moderate</label><br>
-            <label><input type="checkbox" class="magnitude-filter" value="6_6.9" checked> 6.0–6.9 Strong</label><br>
-            <label><input type="checkbox" class="magnitude-filter" value="7_7.9" checked> 7.0–7.9 Major</label><br>
-        </div>
-        <div id="tables">
-            <div id="safestStatesTable"></div>
-            <div id="dangerousStatesTable"></div>
-        </div>
-    </div>
+<body class="dark-mode">
+    <header>
+        <h1>Seismic Sentinels</h1>
+        <button id="darkModeToggle">Toggle Light Mode</button>
+    </header>
+
+    <main>
+        <section id="statsContainer">
+            <h2>Earthquake Statistics</h2>
+            <div id="earthquakeCount"></div>
+            <div id="rankingTables">
+                <div id="safestStatesTable"></div>
+                <div id="dangerousStatesTable"></div>
+            </div>
+        </section>
+
+        <section id="mapContainer">
+            <div id="map"></div>
+        </section>
+
+        <section id="controlsContainer">
+            <div id="yearSliderContainer">
+                <h2>Select Year Range</h2>
+                <div id="yearSlider"></div>
+                <div id="yearRangeDisplay"></div>
+            </div>
+        
+            <div id="filterContainer">
+                <h2>Magnitude Filter</h2>
+                <div id="magnitudeFilters">
+                    <label><input type="checkbox" class="magnitude-filter" value="2_2.9" checked> 2.0–2.9 Minor</label><br>
+                    <label><input type="checkbox" class="magnitude-filter" value="3_3.9" checked> 3.0–3.9 Slight</label><br>
+                    <label><input type="checkbox" class="magnitude-filter" value="4_4.9" checked> 4.0–4.9 Light</label><br>
+                    <label><input type="checkbox" class="magnitude-filter" value="5_5.9" checked> 5.0–5.9 Moderate</label><br>
+                    <label><input type="checkbox" class="magnitude-filter" value="6_6.9" checked> 6.0–6.9 Strong</label><br>
+                    <label><input type="checkbox" class="magnitude-filter" value="7_7.9" checked> 7.0–7.9 Major</label><br>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        // Function to toggle dark mode
+        const toggleDarkMode = () => {
+            body.classList.toggle('dark-mode');
+            const isDarkMode = body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDarkMode);
+            updateToggleText(isDarkMode);
+        };
+
+        // Function to update toggle button text based on mode
+        const updateToggleText = (isDarkMode) => {
+            if (isDarkMode) {
+                darkModeToggle.textContent = 'Toggle Light Mode';
+            } else {
+                darkModeToggle.textContent = 'Toggle Dark Mode';
+            }
+        };
+
+        // Toggle dark mode on button click
+        darkModeToggle.addEventListener('click', toggleDarkMode);
+
+        // Check local storage for dark mode preference on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const darkMode = localStorage.getItem('darkMode');
+            if (darkMode === 'false') {
+                body.classList.remove('dark-mode');
+            }
+            updateToggleText(body.classList.contains('dark-mode'));
+        });
+    </script>
 </body>
 </html>

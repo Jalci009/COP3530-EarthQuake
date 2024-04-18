@@ -12,7 +12,7 @@ function initMap() {
     // Create a new map instance centered on the United States
     map = new google.maps.Map(document.getElementById('map'), {
         center: { lat: 39.8283, lng: -98.5795 },
-        zoom: 3.6,
+        zoom: 4.0,
     });
 
     // Initialize noUiSlider for the year range selection
@@ -26,10 +26,14 @@ function initMap() {
             'min': 1990,
             'max': 2004
         },
-        tooltips: true,
-        format: {
-            to: value => parseInt(value),
-            from: value => parseInt(value)
+        tooltips: false,
+        pips: {
+            mode: 'values',
+            values: [1990, 1995, 2000, 2004], // Specify positions of small ticks
+            density: 7, // Adjust spacing between ticks (percentage)
+            format: {
+                to: value => '' // Empty string to prevent displaying any labels
+            }
         }
     });
 
@@ -39,12 +43,7 @@ function initMap() {
     // Update the year range display dynamically on slider slide (move) event
     yearSlider.noUiSlider.on('slide', function (values, handle) {
         const [startYear, endYear] = values.map(value => parseInt(value));
-        if (startYear === endYear) {
-            // Display single year if start year equals end year
-            yearRangeDisplay.textContent = `${startYear}`;
-        } else {
-            yearRangeDisplay.textContent = `${startYear} - ${endYear}`;
-        }
+        updateYearRangeDisplay(yearRangeDisplay, values); // Always update with selected range
     });
 
     // Update the map and earthquake markers after slider handle is released (change event)
@@ -138,9 +137,25 @@ function displayEarthquakes(data) {
     data.forEach(earthquake => {
         const location = { lat: earthquake.latitude, lng: earthquake.longitude };
 
-        // Create a custom marker icon
+        // Determine marker color based on earthquake magnitude
+        let markerColor;
+        if (earthquake.magnitude >= 2 && earthquake.magnitude < 3) {
+            markerColor = 'blue'; // Green for magnitude 2.0 - 2.9
+        } else if (earthquake.magnitude >= 3 && earthquake.magnitude < 4) {
+            markerColor = 'purple'; // Yellow for magnitude 3.0 - 3.9
+        } else if (earthquake.magnitude >= 4 && earthquake.magnitude < 5) {
+            markerColor = 'green'; // Orange for magnitude 4.0 - 4.9
+        } else if (earthquake.magnitude >= 5 && earthquake.magnitude < 6) {
+            markerColor = 'yellow'; // Orange for magnitude 5.0 - 5.9
+        } else if (earthquake.magnitude >= 6 && earthquake.magnitude < 7) {
+            markerColor = 'orange'; // Orange for magnitude 6.0 - 6.9
+        } else {
+            markerColor = 'red'; // Red for magnitude 7.0 and above
+        }
+
+        // Create a custom marker icon based on the determined color
         const customIcon = {
-            url: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+            url: `http://maps.google.com/mapfiles/ms/icons/${markerColor}-dot.png`, // Use different color marker icons
             scaledSize: new google.maps.Size(15, 15)
         };
 
@@ -167,6 +182,7 @@ function displayEarthquakes(data) {
         markers.push(marker);
     });
 }
+
 
 function debounceOpenInfoWindow(marker, earthquake) {
     // Close any previously opened InfoWindow
@@ -275,10 +291,13 @@ function generateTableHTML(states, title) {
 }
 
 function updateYearRangeDisplay(displayElement, values) {
-    const [startYear, endYear] = values;
+    const [startYear, endYear] = values.map(value => Math.round(parseInt(value)));
+
     if (startYear === endYear) {
-        displayElement.textContent = `${startYear}`;
+        // Display the single year if start year equals end year
+        displayElement.textContent = `Selected Year: ${startYear}`;
     } else {
-        displayElement.textContent = `${startYear} - ${endYear}`;
+        // Display the year range if start year is different from end year
+        displayElement.textContent = `Selected Range: ${startYear} - ${endYear}`;
     }
 }
