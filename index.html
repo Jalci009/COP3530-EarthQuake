@@ -5,33 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Earthquake Map</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
         #map {
-            height: 600px;
+            height: 650px;
             width: 100%;
         }
 
-        #sliderContainer {
-            margin-top: 20px;
+        #container {
+            max-width: 800px;
+            margin: 0 auto;
             padding: 20px;
-            max-width: 600px; /* Set maximum width for the slider container */
-            margin: 0 auto; /* Center the slider container horizontally */
-        }
-
-        #yearSlider {
-            width: 100%; /* Make the slider span the entire container */
+            box-sizing: border-box;
         }
 
         #filter-controls {
-            margin-top: 20px; /* Or adjust based on layout */
+            margin-top: -37px;
+            margin-bottom: 30px;
+            margin-right: -1100px;
+        }
+        
+        #countContainer {
+            margin-left: -1100px;
+            margin-top: -35px;
         }
 
-        #filter-controls label {
-            display: block; /* Each label on a new line */
-            cursor: pointer; /* Hand cursor on hover */
+        #tables {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: -120px;
         }
 
-        #filter-controls input {
-            margin-right: 5px; /* Space between checkbox and label text */
+        /* Style each table */
+        #safestStatesTable,
+        #dangerousStatesTable {
+            border: 1px solid #ccc;
+            padding: 10px;
+            width: 100%;
+            margin-bottom: 20px; /* Optional: Add margin between tables */
         }
     </style>
     <!-- Include Google Maps API with your API key -->
@@ -45,27 +62,28 @@
 </head>
 <body>
     <div id="map"></div>
-    <div id="sliderContainer">
-        <label for="yearSlider">Select Year Range:</label>
-        <div id="yearSlider"></div>
-        <div>Selected Range: <span id="yearRangeDisplay"></span></div>
-    </div>
-    <div id="earthquakeCount">Number of Earthquakes: 0</div>
-    <div id="stateFilter">
-        <label for="stateInput">Enter State:</label>
-        <input type="text" id="stateInput" placeholder="Type a state name" />
-        <button id="stateSearchBtn">Search</button>
-    </div>
-    <div id="filter-controls">
-        <h4>Magnitude Filter</h4>
-        <label><input type="checkbox" class="magnitude-filter" value="2_2.9" checked> 2.0–2.9 Minor</label><br>
-        <label><input type="checkbox" class="magnitude-filter" value="3_3.9" checked> 3.0–3.9 Slight</label><br>
-        <label><input type="checkbox" class="magnitude-filter" value="4_4.9" checked> 4.0–4.9 Light</label><br>
-        <label><input type="checkbox" class="magnitude-filter" value="5_5.9" checked> 5.0–5.9 Moderate</label><br>
-        <label><input type="checkbox" class="magnitude-filter" value="6_6.9" checked> 6.0–6.9 Strong</label><br>
-        <label><input type="checkbox" class="magnitude-filter" value="7_7.9" checked> 7.0–7.9 Major</label><br>
-        <label><input type="checkbox" class="magnitude-filter" value="8_8.9" checked> 8.0–8.9 Great</label><br>
-        <label><input type="checkbox" class="magnitude-filter" value="9_9.9" checked> 9.0–9.9 Extreme</label><br>
+    <div id="container">
+        <div id="sliderContainer">
+            <label for="yearSlider">Select Year Range:</label>
+            <div id="yearSlider"></div>
+            <div>Selected Range: <span id="yearRangeDisplay"></span></div>
+        </div>
+        <div id="countContainer">
+            <div id="earthquakeCount">Number of Earthquakes: 0</div>
+        </div>
+        <div id="filter-controls">
+            <h4>Magnitude Filter</h4>
+            <label><input type="checkbox" class="magnitude-filter" value="2_2.9" checked> 2.0–2.9 Minor</label><br>
+            <label><input type="checkbox" class="magnitude-filter" value="3_3.9" checked> 3.0–3.9 Slight</label><br>
+            <label><input type="checkbox" class="magnitude-filter" value="4_4.9" checked> 4.0–4.9 Light</label><br>
+            <label><input type="checkbox" class="magnitude-filter" value="5_5.9" checked> 5.0–5.9 Moderate</label><br>
+            <label><input type="checkbox" class="magnitude-filter" value="6_6.9" checked> 6.0–6.9 Strong</label><br>
+            <label><input type="checkbox" class="magnitude-filter" value="7_7.9" checked> 7.0–7.9 Major</label><br>
+        </div>
+        <div id="tables">
+            <div id="safestStatesTable"></div>
+            <div id="dangerousStatesTable"></div>
+        </div>
     </div>
 </body>
 </html>

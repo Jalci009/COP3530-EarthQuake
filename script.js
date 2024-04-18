@@ -1,20 +1,23 @@
+document.addEventListener('DOMContentLoaded', () => {
+    initMap();
+});
+
 let map;
 let markers = [];
-let updateTimeout;
 let sliderValues = [1990, 2004]; // Default year range
+let infoWindow; // Single InfoWindow instance
+let timeoutId; // Variable to store timeout ID for debouncing
 
 function initMap() {
     // Create a new map instance centered on the United States
     map = new google.maps.Map(document.getElementById('map'), {
         center: { lat: 39.8283, lng: -98.5795 },
-        zoom: 4.8,
+        zoom: 3.6,
     });
 
     // Initialize noUiSlider for the year range selection
     const yearSlider = document.getElementById('yearSlider');
     const yearRangeDisplay = document.getElementById('yearRangeDisplay');
-    const stateInput = document.getElementById('stateInput'); // Input field for state name
-    const stateSearchBtn = document.getElementById('stateSearchBtn'); // Button to trigger state filtering
 
     noUiSlider.create(yearSlider, {
         start: sliderValues,
@@ -30,76 +33,173 @@ function initMap() {
         }
     });
 
-    // Set initial text content for the year range display
-    yearRangeDisplay.textContent = `Selected Range: ${sliderValues[0]} - ${sliderValues[1]}`;
+    // Update the year range display with the initial default slider values
+    updateYearRangeDisplay(yearRangeDisplay, sliderValues);
 
-    // Update the year range display in real-time on slider slide (move) event
+    // Update the year range display dynamically on slider slide (move) event
     yearSlider.noUiSlider.on('slide', function (values, handle) {
-        yearRangeDisplay.textContent = `Selected Range: ${parseInt(values[0])} - ${parseInt(values[1])}`;
-    });
-
-    // Keep the existing 'change' event to handle the final update
-    yearSlider.noUiSlider.on('change', function (values, handle) {
-        sliderValues = values.map(value => parseInt(value));
-        updateMapDisplay(); // This function should also apply state filtering
-    });
-
-    // Initialize the magnitude filters
-    initMagnitudeFilters();
-
-    // Add event listener to the state input field and search button
-    stateSearchBtn.addEventListener('click', function() {
-        updateMapDisplay(); // Apply the state filter along with others
-    });
-
-    stateInput.addEventListener('keypress', function(event) {
-        if (event.key === "Enter") {
-            updateMapDisplay(); // Apply the state filter along with others
+        const [startYear, endYear] = values.map(value => parseInt(value));
+        if (startYear === endYear) {
+            // Display single year if start year equals end year
+            yearRangeDisplay.textContent = `${startYear}`;
+        } else {
+            yearRangeDisplay.textContent = `${startYear} - ${endYear}`;
         }
     });
 
-    // Initial display of earthquakes with the default filters
-    updateMapDisplay();
+    // Update the map and earthquake markers after slider handle is released (change event)
+    yearSlider.noUiSlider.on('change', function (values) {
+        sliderValues = values.map(value => parseInt(value));
+        debounceUpdateMapDisplay();
+        updateEarthquakeRankingTables(); // Update earthquake tables when slider changes
+    });
+
+    // Add event listeners to magnitude filter checkboxes with debouncing
+    const magnitudeCheckboxes = document.querySelectorAll('.magnitude-filter');
+    magnitudeCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', () => {
+            debounceUpdateMapDisplay();
+            updateEarthquakeRankingTables(); // Update earthquake tables when filters change
+        });
+    });
+
+    // Create a single InfoWindow instance
+    infoWindow = new google.maps.InfoWindow();
+
+    // Fetch earthquake data and initialize map
+    fetchEarthquakeDataAndInitializeMap();
 }
 
-
-function updateMapDisplay() {
-    // Get the currently selected year range from sliderValues
-    const [startYear, endYear] = sliderValues;
-    
-    // Get the selected magnitude ranges from the checkboxes
-    const selectedMagnitudes = getSelectedMagnitudes();
-
-    // Get the entered state from the state input field
-    const stateInput = document.getElementById('stateInput').value.trim().toLowerCase();
-
-    // Clear any existing markers from the map
-    clearMarkers();
-
-    // Fetch earthquake data from JSON file
+function fetchEarthquakeDataAndInitializeMap() {
+    // Fetch initial earthquake data from JSON file
     fetch('earthquake_data.json')
         .then(response => response.json())
         .then(data => {
-            // Filter the data according to the selected year range, magnitudes, and state
-            const filteredData = data.filter(earthquake => {
-                const yearInRange = earthquake.year >= startYear && earthquake.year <= endYear;
-                const magnitudeInRange = selectedMagnitudes.some(([min, max]) => earthquake.magnitude >= min && earthquake.magnitude <= max);
-                // State filter checks if the state input is empty or matches the earthquake's state
-                const stateMatches = !stateInput || earthquake.state.trim().toLowerCase() === stateInput;
-                return yearInRange && magnitudeInRange && stateMatches;
-            });
+            // Display all earthquakes on the map
+            displayEarthquakes(data);
 
-            // Update the earthquake count display
-            document.getElementById('earthquakeCount').textContent = `Number of Earthquakes: ${filteredData.length}`;
+            // Update the earthquake count based on fetched data
+            updateEarthquakeCount(data);
 
-            // Add markers for the filtered earthquake data
-            addMarkers(filteredData);
+            // Update earthquake ranking tables based on fetched data
+            updateEarthquakeRankingTables(data);
         })
         .catch(error => {
             console.error('Error fetching earthquake data:', error);
         });
 }
 
+function debounceUpdateMapDisplay() {
+    // Clear previous timeout to prevent rapid consecutive function calls
+    clearTimeout(timeoutId);
+
+    // Set a new timeout for debouncing
+    timeoutId = setTimeout(() => {
+        updateMapDisplay();
+    }, 300); // Adjust the delay (in milliseconds) as needed
+}
+
+function updateMapDisplay() {
+    const [startYear, endYear] = sliderValues;
+
+    // Get selected magnitude ranges from checkboxes
+    const selectedMagnitudes = getSelectedMagnitudes();
+
+    // Clear existing markers from the map
+    clearMarkers();
+
+    // Fetch earthquake data from JSON file
+    fetch('earthquake_data.json')
+        .then(response => response.json())
+        .then(data => {
+            // Filter the earthquake data based on the selected year range and magnitudes
+            const filteredData = data.filter(earthquake => {
+                const yearInRange = earthquake.year >= startYear && earthquake.year <= endYear;
+                const magnitudeInRange = selectedMagnitudes.some(([min, max]) => earthquake.magnitude >= min && earthquake.magnitude <= max);
+                return yearInRange && magnitudeInRange;
+            });
+
+            // Display filtered earthquakes on the map
+            displayEarthquakes(filteredData);
+
+            // Update the earthquake count based on filtered data
+            updateEarthquakeCount(filteredData);
+
+            // Update earthquake ranking tables based on filtered data
+            updateEarthquakeRankingTables(filteredData);
+        })
+        .catch(error => {
+            console.error('Error fetching earthquake data:', error);
+        });
+}
+
+function displayEarthquakes(data) {
+    // Display earthquake markers on the map
+    data.forEach(earthquake => {
+        const location = { lat: earthquake.latitude, lng: earthquake.longitude };
+
+        // Create a custom marker icon
+        const customIcon = {
+            url: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+            scaledSize: new google.maps.Size(15, 15)
+        };
+
+        // Create a marker for each earthquake
+        const marker = new google.maps.Marker({
+            position: location,
+            map: map,
+            icon: customIcon
+        });
+
+        // Attach mouseover event listener to show InfoWindow with debounce
+        marker.addListener('mouseover', () => {
+            // Debounce opening the InfoWindow
+            debounceOpenInfoWindow(marker, earthquake);
+        });
+
+        // Attach mouseout event listener to close InfoWindow
+        marker.addListener('mouseout', () => {
+            // Close InfoWindow when mouse moves out of the marker
+            infoWindow.close();
+        });
+
+        // Store the marker in the markers array
+        markers.push(marker);
+    });
+}
+
+function debounceOpenInfoWindow(marker, earthquake) {
+    // Close any previously opened InfoWindow
+    infoWindow.close();
+
+    // Set a timeout to open the InfoWindow after a short delay
+    setTimeout(() => {
+        const infoContent = getInfoWindowContent(earthquake);
+        infoWindow.setContent(infoContent);
+        infoWindow.open(map, marker);
+    }, 100); // Adjust the delay (in milliseconds) as needed
+}
+
+function getInfoWindowContent(earthquake) {
+    const { state, magnitude, year } = earthquake;
+    return `
+        <div>
+            <strong>State:</strong> ${state}<br>
+            <strong>Magnitude:</strong> ${magnitude}<br>
+            <strong>Year:</strong> ${year}
+        </div>
+    `;
+}
+
+function clearMarkers() {
+    // Clear all existing markers from the map
+    markers.forEach(marker => {
+        marker.setMap(null);
+    });
+
+    // Reset the markers array
+    markers = [];
+}
 
 function getSelectedMagnitudes() {
     // Retrieve the checked checkboxes and map their values to number ranges
@@ -110,137 +210,75 @@ function getSelectedMagnitudes() {
     });
 }
 
-function applyFilters(data) {
-    // Log the original data count
-    console.log(`Original data count: ${data.length}`);
+function updateEarthquakeCount(data) {
+    // Update the earthquake count display
+    document.getElementById('earthquakeCount').textContent = `Number of Earthquakes: ${data.length}`;
+}
 
-    const selectedCheckboxes = Array.from(document.querySelectorAll('.magnitude-filter:checked'));
-    // If the "All Magnitudes" checkbox is checked, we want to ignore other magnitude filters
-    const isAllMagnitudesChecked = selectedCheckboxes.some(cb => cb.value === '3_9.9');
-    
-    // Get the entered state from the state input field
-    const stateInput = document.getElementById('stateInput').value.trim().toLowerCase();
+function updateEarthquakeRankingTables(data) {
+    const stateCounts = calculateStateEarthquakeCounts(data);
 
-    let selectedMagnitudes;
-    if (isAllMagnitudesChecked) {
-        selectedMagnitudes = [[2.0, 9.9]]; // This range should cover all possible magnitudes
+    // Convert stateCounts into an array of objects for sorting
+    const stateCountsArray = Object.entries(stateCounts).map(([state, count]) => ({ state, count }));
+
+    // Sort states by earthquake count (descending order)
+    stateCountsArray.sort((a, b) => b.count - a.count);
+
+    // Extract top 5 safest states (least earthquakes)
+    const topSafestStates = stateCountsArray.slice(0, 5);
+
+    // Extract top 5 most dangerous states (most earthquakes)
+    const topDangerousStates = stateCountsArray.slice(-5).reverse();
+
+    // Generate and update tables for safest and most dangerous states
+    const safestStatesTable = generateTableHTML(topSafestStates, 'Top 5 Most Dangerous States');
+    const dangerousStatesTable = generateTableHTML(topDangerousStates, 'Top 5 Safest States');
+
+    // Update HTML content of tables
+    document.getElementById('safestStatesTable').innerHTML = safestStatesTable;
+    document.getElementById('dangerousStatesTable').innerHTML = dangerousStatesTable;
+}
+
+function calculateStateEarthquakeCounts(data) {
+    const stateCounts = {};
+
+    // Count earthquakes by state
+    data.forEach(earthquake => {
+        const state = earthquake.state;
+        if (stateCounts[state]) {
+            stateCounts[state]++;
+        } else {
+            stateCounts[state] = 1;
+        }
+    });
+
+    return stateCounts;
+}
+
+function generateTableHTML(states, title) {
+    let tableHTML = `<h3>${title}</h3>
+                     <table>
+                        <tr>
+                            <th>State</th>
+                            <th>Earthquake Count</th>
+                        </tr>`;
+
+    states.forEach((stateData, index) => {
+        tableHTML += `<tr>
+                        <td>${stateData.state}</td>
+                        <td>${stateData.count}</td>
+                      </tr>`;
+    });
+
+    tableHTML += `</table>`;
+    return tableHTML;
+}
+
+function updateYearRangeDisplay(displayElement, values) {
+    const [startYear, endYear] = values;
+    if (startYear === endYear) {
+        displayElement.textContent = `${startYear}`;
     } else {
-        selectedMagnitudes = selectedCheckboxes.map(cb => cb.value.split('_').map(Number));
+        displayElement.textContent = `${startYear} - ${endYear}`;
     }
-    
-    const filteredData = data.filter(earthquake => {
-        const yearInRange = earthquake.year >= sliderValues[0] && earthquake.year <= sliderValues[1];
-        const magnitudeInRange = isAllMagnitudesChecked || selectedMagnitudes.some(([min, max]) => earthquake.magnitude >= min && earthquake.magnitude <= max);
-        // State filter checks if the state input is empty or matches the earthquake's state
-        const stateMatches = !stateInput || earthquake.state.trim().toLowerCase() === stateInput;
-        return yearInRange && magnitudeInRange && stateMatches;
-    });
-
-    // Log the filtered data count
-    console.log(`Filtered data count: ${filteredData.length}`);
-    return filteredData;
-}
-
-
-// Function to display earthquake markers based on the selected year range
-function displayEarthquakesByYearRange(startYear, endYear) {
-    // Clear existing markers from the map
-    clearMarkers();
-
-    // Fetch earthquake data from JSON file
-    fetch('earthquake_data.json')
-        .then(response => response.json())
-        .then(data => {
-            console.log('Retrieved earthquake data:', data);
-
-            // Filter earthquake data for the selected year range
-            const filteredData = data.filter(earthquake => earthquake.year >= startYear && earthquake.year <= endYear);
-
-            // Add markers for the filtered earthquake data
-            filteredData.forEach(earthquake => {
-                const location = { lat: earthquake.latitude, lng: earthquake.longitude };
-
-                // Create a smaller custom marker icon
-                const customIcon = {
-                    url: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-                    scaledSize: new google.maps.Size(15, 15)
-                };
-
-                // Create a marker title with state, magnitude, and year
-                const markerTitle = `${earthquake.state} - Magnitude ${earthquake.magnitude} - Year ${earthquake.year}`;
-
-                // Create a marker for each earthquake location with the custom icon and title
-                const marker = new google.maps.Marker({
-                    position: location,
-                    map: map,
-                    title: markerTitle, // Use the custom marker title
-                    icon: customIcon
-                });
-
-                // Push marker to the markers array
-                markers.push(marker);
-            });
-        })
-        .catch(error => {
-            console.error('Error fetching earthquake data:', error);
-        });
-}
-
-// This function will now also consider the magnitude filter when displaying markers
-function displayEarthquakesByYearRangeAndMagnitude(startYear, endYear, magnitudeFilter) {
-    // Clear existing markers from the map
-    clearMarkers();
-
-    // Fetch earthquake data from JSON file
-    fetch('earthquake_data.json')
-        .then(response => response.json())
-        .then(data => {
-            // Filter earthquake data for the selected year range and magnitude
-            const filteredData = data.filter(earthquake => {
-                const yearInRange = earthquake.year >= startYear && earthquake.year <= endYear;
-                const magnitudeInRange = magnitudeFilter ? earthquake.magnitude >= magnitudeFilter.min && earthquake.magnitude <= magnitudeFilter.max : true;
-                return yearInRange && magnitudeInRange;
-            });
-
-            // Add markers for the filtered earthquake data
-            addMarkers(filteredData);
-        })
-        .catch(error => {
-            console.error('Error fetching earthquake data:', error);
-        });
-}
-
-// Separate function for adding markers to the map
-function addMarkers(filteredData) {
-    filteredData.forEach(earthquake => {
-        const location = { lat: earthquake.latitude, lng: earthquake.longitude };
-        const customIcon = {
-            url: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png',
-            scaledSize: new google.maps.Size(15, 15)
-        };
-        const markerTitle = `${earthquake.state} - Magnitude ${earthquake.magnitude} - Year ${earthquake.year}`;
-        const marker = new google.maps.Marker({
-            position: location,
-            map: map,
-            title: markerTitle,
-            icon: customIcon
-        });
-        markers.push(marker);
-    });
-}
-
-// Initialize magnitude filter checkboxes
-function initMagnitudeFilters() {
-    const magnitudeCheckboxes = document.querySelectorAll('.magnitude-filter');
-    magnitudeCheckboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', updateMapDisplay);
-    });
-}
-
-// Function to clear all markers from the map
-function clearMarkers() {
-    markers.forEach(marker => {
-        marker.setMap(null);
-    });
-    markers = []; // Clear the markers array
 }

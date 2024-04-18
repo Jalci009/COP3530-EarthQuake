@@ -6,8 +6,18 @@
 #include <algorithm>
 #include <iomanip>
 #include <list>
+#include <unordered_map>
 
-// Custom hash function for strings
+struct Earthquake {
+    std::string state;
+    double magnitude;
+    std::string data_type;
+    double longitude;
+    double latitude;
+    int year;
+};
+
+// Custom hash function for std::string keys (similar to your custom hash function)
 size_t customHash(const std::string& key, size_t tableSize) {
     size_t hash = 0;
     for (char ch : key) {
@@ -77,22 +87,9 @@ public:
     }
 };
 
-struct Earthquake {
-    std::string state;
-    double magnitude;
-    std::string data_type;
-    double longitude;
-    double latitude;
-    int year;
-};
-
-bool isState(const std::string& name, const HashSet<std::string>& validStates) {
-    return validStates.contains(name);
-}
-
 int main() {
     std::ifstream file("earthquake_data.csv");
-    std::vector<Earthquake> earthquakes;
+    std::unordered_map<std::string, std::vector<Earthquake>> earthquakeMap;
 
     if (!file.is_open()) {
         std::cerr << "Error opening file!" << std::endl;
@@ -158,10 +155,12 @@ int main() {
         }
 
         // Check if earthquake data meets all criteria
-        if (isState(eq.state, validStatesSet) && eq.magnitude >= 2.0 && eq.data_type == "earthquake") {
+        if (validStatesSet.contains(eq.state) && eq.magnitude >= 2.0 && eq.data_type == "earthquake") {
             if (eq.state == "Georgia" && eq.latitude > 40)
                 continue;
-            earthquakes.push_back(eq);
+            
+            // Store earthquake in the map using state as key
+            earthquakeMap[eq.state].push_back(eq);
         }
     }
 
@@ -173,21 +172,27 @@ int main() {
     }
 
     jsonFile << "[\n";
-    for (size_t i = 0; i < earthquakes.size(); ++i) {
-        const Earthquake& eq = earthquakes[i];
-        jsonFile << "    {\n";
-        jsonFile << "        \"state\": \"" << eq.state << "\",\n";
-        jsonFile << "        \"magnitude\": " << eq.magnitude << ",\n";
-        jsonFile << "        \"longitude\": " << eq.longitude << ",\n";
-        jsonFile << "        \"latitude\": " << eq.latitude << ",\n";
-        jsonFile << "        \"year\": " << eq.year << "\n";
-        jsonFile << "    }";
-        if (i < earthquakes.size() - 1) {
-            jsonFile << ",";
+    bool firstState = true;
+    for (const auto& pair : earthquakeMap) {
+        const std::string& state = pair.first;
+        const std::vector<Earthquake>& eqs = pair.second;
+
+        for (size_t i = 0; i < eqs.size(); ++i) {
+            const Earthquake& eq = eqs[i];
+            if (!firstState) {
+                jsonFile << ",\n";
+            }
+            jsonFile << "    {\n";
+            jsonFile << "        \"state\": \"" << state << "\",\n";
+            jsonFile << "        \"magnitude\": " << eq.magnitude << ",\n";
+            jsonFile << "        \"longitude\": " << eq.longitude << ",\n";
+            jsonFile << "        \"latitude\": " << eq.latitude << ",\n";
+            jsonFile << "        \"year\": " << eq.year << "\n";
+            jsonFile << "    }";
+            firstState = false;
         }
-        jsonFile << "\n";
     }
-    jsonFile << "]\n";
+    jsonFile << "\n]\n";
 
     jsonFile.close();
     std::cout << "Successfully wrote filtered earthquake data to earthquake_data.json" << std::endl;
