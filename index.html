@@ -77,17 +77,43 @@
             <div id="filterContainer">
                 <h2>Magnitude Filter</h2>
                 <div id="magnitudeFilters">
-                    <label><input type="checkbox" class="magnitude-filter" value="2_2.9" checked> 2.0–2.9 Minor</label><br>
-                    <label><input type="checkbox" class="magnitude-filter" value="3_3.9" checked> 3.0–3.9 Slight</label><br>
-                    <label><input type="checkbox" class="magnitude-filter" value="4_4.9" checked> 4.0–4.9 Light</label><br>
-                    <label><input type="checkbox" class="magnitude-filter" value="5_5.9" checked> 5.0–5.9 Moderate</label><br>
-                    <label><input type="checkbox" class="magnitude-filter" value="6_6.9" checked> 6.0–6.9 Strong</label><br>
-                    <label><input type="checkbox" class="magnitude-filter" value="7_7.9" checked> 7.0–7.9 Major</label><br>
+                    <label class="magnitude-filter-label">
+                        <input type="checkbox" id="selectAllCheckbox" checked> Select All
+                    </label>
+                    <br>
+                    <label class="magnitude-filter-label">
+                        <input type="checkbox" class="magnitude-filter" value="2_2.9" checked> 2.0–2.9 Minor
+                        <button class="only-button">Only</button>
+                    </label>
+                    <br>
+                    <label class="magnitude-filter-label">
+                        <input type="checkbox" class="magnitude-filter" value="3_3.9" checked> 3.0–3.9 Slight
+                        <button class="only-button">Only</button>
+                    </label>
+                    <br>
+                    <label class="magnitude-filter-label">
+                        <input type="checkbox" class="magnitude-filter" value="4_4.9" checked> 4.0–4.9 Light
+                        <button class="only-button">Only</button>
+                    </label>
+                    <br>
+                    <label class="magnitude-filter-label">
+                        <input type="checkbox" class="magnitude-filter" value="5_5.9" checked> 5.0–5.9 Moderate
+                        <button class="only-button">Only</button>
+                    </label>
+                    <br>
+                    <label class="magnitude-filter-label">
+                        <input type="checkbox" class="magnitude-filter" value="6_6.9" checked> 6.0–6.9 Strong
+                        <button class="only-button">Only</button>
+                    </label>
+                    <br>
+                    <label class="magnitude-filter-label">
+                        <input type="checkbox" class="magnitude-filter" value="7_7.9" checked> 7.0–7.9 Major
+                        <button class="only-button">Only</button>
+                    </label>
                 </div>
-            </div>
+            </div>            
         </section>
     </main>
-
     <script>
         const darkModeToggle = document.getElementById('darkModeToggle');
         const body = document.body;

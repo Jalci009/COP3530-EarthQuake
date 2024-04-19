@@ -24,6 +24,40 @@ main {
     padding: 20px;
 }
 
+.only-button {
+    background-color: #666;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    display: none;
+    position: absolute; /* Position "Only" button absolutely */
+    top: 50%; /* Vertically center within label */
+    transform: translateY(-50%); /* Center vertically */
+}
+
+.magnitude-filter-label {
+    display: inline-block; /* Ensure label occupies space */
+    position: relative; /* Establish positioning context for absolute positioning */
+    cursor: pointer; /* Change cursor on hover */
+}
+
+.magnitude-filter-label:hover .only-button {
+    display: inline-block; /* Show the "Only" button */
+}
+
+.dark-mode .only-button {
+    background-color: #666;
+    color: #fff;
+}
+
+.magnitude-filter {
+    margin-right: 5px;
+}
+
 #statsContainer {
     flex: 1;
     max-width: 300px;

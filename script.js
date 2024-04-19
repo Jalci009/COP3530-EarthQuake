@@ -1,5 +1,45 @@
 document.addEventListener('DOMContentLoaded', () => {
-    initMap();
+    const magnitudeCheckboxes = document.querySelectorAll('.magnitude-filter');
+    const selectAllCheckbox = document.getElementById('selectAllCheckbox');
+
+    // Event listener for "Select All" checkbox
+    selectAllCheckbox.addEventListener('change', () => {
+        const isChecked = selectAllCheckbox.checked;
+
+        // Update all magnitude filter checkboxes based on the state of "Select All" checkbox
+        magnitudeCheckboxes.forEach((checkbox) => {
+            checkbox.checked = isChecked;
+        });
+
+        // Perform any desired actions after updating magnitude filters
+        updateMagnitudeFilters();
+    });
+
+    const onlyButtons = document.querySelectorAll('.only-button');
+
+    onlyButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+            const associatedCheckbox = button.previousElementSibling;
+            associatedCheckbox.checked = true; // Check the associated magnitude filter checkbox
+
+            // Uncheck all other checkboxes except the clicked one
+            magnitudeCheckboxes.forEach((checkbox) => {
+                if (checkbox !== associatedCheckbox) {
+                    checkbox.checked = false;
+                }
+            });
+
+            // Update the magnitude filters after toggling checkboxes
+            updateMagnitudeFilters();
+        });
+    });
+
+    function updateMagnitudeFilters() {
+        // Perform any desired actions after updating magnitude filters
+        console.log('Magnitude filters updated');
+        debounceUpdateMapDisplay(); // Assuming this function is defined elsewhere
+        updateEarthquakeRankingTables(); // Assuming this function is defined elsewhere
+    }
 });
 
 let map;
