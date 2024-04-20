@@ -11,25 +11,44 @@
     <!-- Include noUiSlider library -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.js"></script>
-    <!-- Include your custom JavaScript file -->
+    <!-- Include your custom JavaScript files -->
     <script src="script.js"></script>
+
 </head>
 <body class="dark-mode">
     <header>
         <h1>Seismic Sentinels</h1>
         <button id="darkModeToggle">Toggle Light Mode</button>
     </header>
-
+    
     <main>
-        <section id="statsContainer">
-            <h2>Earthquake Statistics</h2>
-            <div id="earthquakeCount"></div>
-            <div id="rankingTables">
-                <div id="safestStatesTable"></div>
-                <div id="dangerousStatesTable"></div>
+        <div>
+            <div id="algorithmContainer">
+                <div id="algorithmBox">
+                    <h2 style="text-align:center">Choose Your Map Population Algorithm</h2>
+                    <div class="radio-container">
+                        <label>
+                            <input type="radio" name="algorithm" value="unordered" checked>
+                            Unordered Map
+                        </label>
+                        <label>
+                            <input type="radio" name="algorithm" value="ordered">
+                            Ordered Map
+                        </label>
+                    </div>
+                    <button id="generateButton">Generate</button>
+                </div>
             </div>
-        </section>
-
+            <section id="statsContainer">
+                <h2>Earthquake Statistics</h2>
+                <div id="earthquakeCount"></div>
+                <div id="rankingTables">
+                    <div id="safestStatesTable"></div>
+                    <div id="dangerousStatesTable"></div>
+                </div>
+            </section>
+        </div>
+        
         <section id="mapContainer">
             <div id="map"></div>
         </section>

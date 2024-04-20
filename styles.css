@@ -12,7 +12,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 40px;
+    padding: 10px 40px;
     background-color: #222;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -66,6 +66,63 @@ main {
     border-radius: 8px;
     padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#algorithmBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+    flex: 1;
+    max-width: 300px;
+    margin-right: 20px;
+    background-color: #333;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#algorithmBox h2 {
+    color: #fff;
+}
+
+.radio-container {
+    display: flex;
+    justify-content: center;
+}
+
+.radio-container label {
+    display: block;
+    margin-right: 20px;
+    color: #ccc;
+}
+
+/* Button Styles */
+#generateButton {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: rgb(18, 108, 253);
+    color: #fff;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    /* Center the button */
+    margin-top: 20px; /* Adjust the top margin for spacing */
+}
+
+.dark-mode #generateButton {
+    background-color: rgb(18, 108, 253);
+}
+
+.dark-mode #generateButton:hover {
+    background-color: #333;
+}
+
+#generateButton:hover {
+    background-color: #222;
 }
 
 /* Legend Container */
@@ -185,7 +242,8 @@ th {
 
 .dark-mode #statsContainer,
 .dark-mode #yearSliderContainer,
-.dark-mode #filterContainer {
+.dark-mode #filterContainer,
+.dark-mode #algorithmBox {
     background-color: #222;
     color: #eee;
 }
@@ -227,3 +285,4 @@ button#darkModeToggle {
 button#darkModeToggle:hover {
     background-color: #222; /* Darken hover color */
 }
+

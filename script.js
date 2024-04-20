@@ -287,8 +287,8 @@ function updateEarthquakeRankingTables(data) {
     const topDangerousStates = stateCountsArray.slice(-5).reverse();
 
     // Generate and update tables for safest and most dangerous states
-    const safestStatesTable = generateTableHTML(topSafestStates, 'Top 5 Most Dangerous States');
-    const dangerousStatesTable = generateTableHTML(topDangerousStates, 'Top 5 Safest States');
+    const safestStatesTable = generateTableHTML(topSafestStates, 'Most Vulnerable States');
+    const dangerousStatesTable = generateTableHTML(topDangerousStates, 'Least Vulnerable States');
 
     // Update HTML content of tables
     document.getElementById('safestStatesTable').innerHTML = safestStatesTable;
