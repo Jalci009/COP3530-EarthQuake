@@ -1,4 +1,4 @@
-# Earthquake Risk Mapping: Indentifying Safe Havens
+# Earthquake Risk Mapping: Identifying Safe Havens
 ## COP3530-Project-3 
 
 Terminal commands to run the web app:
