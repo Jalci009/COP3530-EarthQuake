@@ -299,10 +299,11 @@ int main() {
     // Measure runtime
     auto startTime = std::chrono::steady_clock::now();
     readEarthquakeData("earthquake_data.csv", earthquakeMap);
-    writeFilteredEarthquakeDataToJson(earthquakeMap, "earthquake_data.json");
+    writeFilteredEarthquakeDataToJson(earthquakeMap, "public/earthquake_data.json");
     auto endTime = std::chrono::steady_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
-    std::cout << "Time taken: " << duration.count() << " milliseconds" << std::endl;
+    
+    std::cout << "Runtime: " << duration.count() << " ms" << std::endl;
     std::cout << "Successfully wrote filtered earthquake data to earthquake_data.json" << std::endl;
 
     return 0;

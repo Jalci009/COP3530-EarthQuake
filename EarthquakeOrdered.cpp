@@ -153,7 +153,7 @@ int main() {
     readEarthquakeData(file, earthquakeMap, validStatesList);
 
 
-    std::ofstream jsonFile("earthquake_data.json");
+    std::ofstream jsonFile("public/earthquake_data.json");
     if (!jsonFile.is_open()) {
         std::cerr << "Error opening JSON file for writing!" << std::endl;
         return 1;
@@ -165,8 +165,8 @@ int main() {
     
     auto endTime = std::chrono::steady_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
-    std::cout << "Time taken to populate the map: " << duration.count() << " milliseconds" << std::endl;
-
+    
+    std::cout << "Runtime: " << duration.count() << " ms" << std::endl;
     std::cout << "Successfully wrote filtered earthquake data to earthquake_data.json" << std::endl;
     
 

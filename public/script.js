@@ -1,4 +1,95 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Call the initMap function to initialize the map
+    initMap();
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const generateButton = document.getElementById('generateButton');
+
+    // Event listener for "Generate" button click
+    generateButton.addEventListener('click', () => {
+        executeEarthquakeExecutable();
+    });
+
+    // Function to execute the earthquake executable based on selected algorithm
+    function executeEarthquakeExecutable() {
+        const algorithm = document.querySelector('input[name="algorithm"]:checked').value;
+
+        resetMagnitudeFilters();
+
+        resetYearSlider();
+
+        // Make a POST request to trigger the execution of the corresponding executable
+        fetch(`/execute?algorithm=${algorithm}`, { method: 'POST' })
+            .then(response => {
+                if (response.ok) {
+                    return response.json(); // Parse response as JSON
+                } else {
+                    throw new Error('Failed to execute algorithm');
+                }
+            })
+            .then(data => {
+                const { message, runtime } = data;
+                console.log(message);
+                
+                // Display success message along with runtime in alert
+                alert(`${message}\n${runtime}`);
+
+                // Update the runtime display under the corresponding algorithm option
+                const runtimeDisplay = document.getElementById(`${algorithm}Runtime`);
+                if (runtimeDisplay) {
+                    runtimeDisplay.textContent = runtime;
+                }
+
+                // Optionally fetch earthquake data and initialize map after execution
+                return fetchEarthquakeDataAndInitializeMap();
+            })
+            .catch(error => {
+                console.error('Error executing algorithm:', error);
+                alert('Failed to execute algorithm');
+            });
+    }
+
+    // Function to delete earthquake_data.json upon page reload
+    window.addEventListener('beforeunload', () => {
+        // Make a POST request to delete earthquake_data.json
+        fetch('/deleteEarthquakeData', { method: 'POST' })
+            .then(response => {
+                if (response.ok) {
+                    console.log('earthquake_data.json deleted');
+                } else {
+                    console.error('Failed to delete earthquake_data.json');
+                }
+            })
+            .catch(error => {
+                console.error('Error deleting earthquake_data.json:', error);
+            });
+    });
+});
+
+
+function resetMagnitudeFilters() {
+    // Check all magnitude filter checkboxes
+    const magnitudeCheckboxes = document.querySelectorAll('.magnitude-filter');
+    magnitudeCheckboxes.forEach(checkbox => {
+        checkbox.checked = true;
+    });
+}
+
+function resetYearSlider() {
+    const defaultSliderValues = [1990, 2004]; // Default year range values
+
+    // Get the yearSlider element reference
+    const yearSlider = document.getElementById('yearSlider');
+
+    // Use the noUiSlider API to set the slider values to the default range
+    yearSlider.noUiSlider.set(defaultSliderValues);
+
+    // Update the year range display with the default values
+    updateYearRangeDisplay(document.getElementById('yearRangeDisplay'), defaultSliderValues);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
     const magnitudeCheckboxes = document.querySelectorAll('.magnitude-filter');
     const selectAllCheckbox = document.getElementById('selectAllCheckbox');
 
@@ -108,6 +199,7 @@ function initMap() {
     // Fetch earthquake data and initialize map
     fetchEarthquakeDataAndInitializeMap();
 }
+
 
 function fetchEarthquakeDataAndInitializeMap() {
     // Fetch initial earthquake data from JSON file

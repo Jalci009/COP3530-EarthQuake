@@ -97,6 +97,14 @@ main {
     color: #ccc;
 }
 
+/* Runtime text styling */
+.runtime {
+    display: block; /* Display as block to ensure each runtime appears on a new line */
+    text-align: center; /* Center-align the text within the element */
+    margin-top: 5px; /* Adjust top margin as needed */
+    font-size: 13px;
+}
+
 /* Button Styles */
 #generateButton {
     padding: 10px 20px;
