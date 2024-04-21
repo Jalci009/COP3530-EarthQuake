@@ -8,7 +8,7 @@ Terminal commands to run code:
 
 Features:
 
-● Choose Algorithm: Allows the user to select different algorithms for populating the earthquake data map. Users can choose between an unordered map and a map, each with their own runtime characteristics. 
+- Choose Algorithm: Allows the user to select different algorithms for populating the earthquake data map. Users can choose between an unordered map and a map, each with their own runtime characteristics. 
 - Earthquake Statistics: This feature categorizes states into a spectrum from most vulnerable to least vulnerable based on historical earthquake data. It specifically highlights the top five states with the most and least seismic activity, excluding those with zero recorded earthquakes, providing a clear and practical guide for safety assessments.
 - Interactive Google Maps Integration: An interactive map feature allows users to view seismic activities either via satellite or terrain maps. This tool places markers at specific locations of recorded earthquakes, offering users a visual understanding of earthquake distribution. When a user hovers over a marker, a small info window appears directly above the marker. This window provides information such as state, magnitude, and year.
 - Year Range Selection: Users have the flexibility to filter earthquake data based on different time frames. This feature supports viewing all years, a specific year, or a custom range of years. Filtering is crucial for tracking seismic activity trends over time and making informed predictions for future building and safety regulations.
@@ -19,26 +19,30 @@ Features:
 
 Algorithms implement:
 
-● Unordered_map backed by a hash map that was constructed from scratch
+- Unordered_map backed by a hash map that was constructed from scratch
 - Map utilizing the integrated library
 
 Distribution of Responsibility and Roles:
 
-● Shayan Akhoondan & Jair Alcivar: Ensuring user-friendly and accessible interface of the application.
+- Shayan Akhoondan & Jair Alcivar: Ensuring user-friendly and accessible interface of the application.
 Integrate various visual APIs to enhance data visualization to make analysis results
 comprehensible and visually appealing to users.
 
-● Jair Alcivar: Integrate mapping API to visualize earthquake data on a geographical map,
+- Jair Alcivar: Integrate mapping API to visualize earthquake data on a geographical map,
 which will allow users to visualize earthquakes by location.
 
-● Shayan Akhoondan: Backend management of earthquake dataset, ensuring data
+- Shayan Akhoondan: Backend management of earthquake dataset, ensuring data
 integrity, relevance, and working on algorithm analysis to prepare data effectively.
 
 References:
 
 https://github.com/ocornut/imgui/blob/master/imgui_demo.cpp](https://github.com/COP3530/P3-template?tab=readme-ov-file#markdown-and-readme)
+
 https://www.kaggle.com/datasets/alessandrolobello/the-ultimate-earthquake-dataset-from-1990-2023?resource=download
+
 https://console.cloud.google.com/google/maps-apis/api-list?project=ivory-sentry-416603
+
 https://mapsplatform.google.com/
+
 https://bridgesuncc.github.io/assignments/data//4-GraphEQ/README.html
 
