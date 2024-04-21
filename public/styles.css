@@ -294,3 +294,8 @@ button#darkModeToggle:hover {
     background-color: #222; /* Darken hover color */
 }
 
+.earth-risk-title {
+    color: #fff;
+    font-size:  32px;
+    margin: 0;
+}
