@@ -4,7 +4,7 @@
 Terminal commands to run the web app:
 - Install express with command - "npm install express"
 - To start the server run command - "node server.js"
-- Open the link - "http://localhost:####"
+- Open the link returned in the terminal - "http://localhost:####"
 
 Features:
 
