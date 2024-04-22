@@ -25,7 +25,7 @@ size_t customHash(const string& key, size_t tableSize)
     size_t hash = 0;
     for (char ch : key) 
     {
-        hash = (hash * 31 + ch) % tableSize;  // Using a simple prime number hash
+        hash = (hash * 31 + ch) % tableSize;
     }
     return hash;
 }
@@ -62,7 +62,8 @@ private:
     {
         size_t newCapacity = capacity * 2;
         HashMap<K, V> newHashMap(newCapacity); // Create a new HashMap with doubled capacity
-        for (auto& bucket : table) {
+        for (auto& bucket : table) 
+        {
             for (auto node : bucket) 
             {
                 for (const auto& value : node->value) 
@@ -105,19 +106,20 @@ public:
         {
             resizeTable();
         }
-    }
+    }  
 
     vector<V>* find(const K& key) 
     {
         size_t index = getHashIndex(key);
         auto& list = table[index];
-        for (auto& node : list) {
+        for (auto& node : list) 
+        {
             if (node->key == key) 
             {
                 return &(node->value);
             }
         }
-        return nullptr;  // Not found
+        return nullptr;
     }
 
     void clear() 
@@ -303,24 +305,6 @@ void writeFilteredEarthquakeDataToJson(const HashMap<string, Earthquake>& earthq
             if (!isValidState) 
             {
                 continue;
-            }
-
-            // If the state is Georgia and latitude is greater than 40, continue
-            if (node.key == "Georgia") 
-            {
-                bool isGeorgiaValid = false;
-                for (const auto& eq : node.value) 
-                {
-                    if (eq.latitude > 40) 
-                    {
-                        isGeorgiaValid = true;
-                        break;
-                    }
-                }
-                if (isGeorgiaValid) 
-                {
-                    continue;
-                }
             }
 
             // Iterate over earthquakes in the vector and write to JSON

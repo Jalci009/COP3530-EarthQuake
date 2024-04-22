@@ -110,24 +110,6 @@ void writeEarthquakeDataToJson(ofstream& jsonFile, const map<string, vector<Eart
         if (!isValidState(state, validStatesList))
             continue;
 
-        // If the state is Georgia and latitude is greater than 40, continue
-        if (state == "Georgia")
-        {
-            bool isGeorgiaValid = false;
-            for (const auto& eq : earthquakes) 
-            {
-                if (eq.latitude > 40) 
-                {
-                    isGeorgiaValid = true;
-                    break;
-                }
-            }
-            if (isGeorgiaValid) 
-            {
-                continue;
-            }
-        }
-
         // Iterate over earthquakes in the vector and write to JSON
         for (const auto& eq : earthquakes) 
         {
