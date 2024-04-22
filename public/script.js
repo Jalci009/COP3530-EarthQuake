@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () =>
                     runtimeDisplay.textContent = runtime;
                 }
 
-                // Optionally fetch earthquake data and initialize map after execution
+                // Fetch earthquake data and initialize map after execution
                 return fetchEarthquakeDataAndInitializeMap();
             })
             .catch(error => 
@@ -99,7 +99,7 @@ function resetYearSlider()
     // Get the yearSlider element reference
     const yearSlider = document.getElementById('yearSlider');
 
-    // Use the noUiSlider API to set the slider values to the default range
+    // noUiSlider API to set the slider values to the default range
     yearSlider.noUiSlider.set(defaultSliderValues);
 
     // Update the year range display with the default values
@@ -151,10 +151,9 @@ document.addEventListener('DOMContentLoaded', () =>
 
     function updateMagnitudeFilters() 
     {
-        // Perform any desired actions after updating magnitude filters
         console.log('Magnitude filters updated');
-        debounceUpdateMapDisplay(); // Assuming this function is defined elsewhere
-        updateEarthquakeRankingTables(); // Assuming this function is defined elsewhere
+        debounceUpdateMapDisplay();
+        updateEarthquakeRankingTables();
     }
 });
 
@@ -253,7 +252,7 @@ function fetchEarthquakeDataAndInitializeMap()
             .then(response => response.json())
             .then(data => 
             {
-                cachedEarthquakeData = data; // Cache the data
+                cachedEarthquakeData = data;
                 displayEarthquakes(data);
                 updateEarthquakeCount(data);
                 updateEarthquakeRankingTables(data);
@@ -274,7 +273,7 @@ function debounceUpdateMapDisplay()
     timeoutId = setTimeout(() => 
     {
         updateMapDisplay();
-    }, 300); // Adjust the delay (in milliseconds) as needed
+    }, 300); // Adjust the delay (in milliseconds)
 }
 
 function updateMapDisplay() 
@@ -377,7 +376,7 @@ function debounceOpenInfoWindow(marker, earthquake)
         const infoContent = getInfoWindowContent(earthquake);
         infoWindow.setContent(infoContent);
         infoWindow.open(map, marker);
-    }, 100); // Adjust the delay (in milliseconds) as needed
+    }, 100); // Adjust the delay (in milliseconds)
 }
 
 function getInfoWindowContent(earthquake) 
