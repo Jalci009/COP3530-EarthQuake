@@ -1,5 +1,6 @@
 /* Reset default browser styles */
-body {
+body 
+{
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
@@ -8,7 +9,8 @@ body {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-header {
+header 
+{
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -17,14 +19,16 @@ header {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-main {
+main 
+{
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     padding: 20px;
 }
 
-.only-button {
+.only-button 
+{
     background-color: #666;
     color: #fff;
     border: none;
@@ -39,26 +43,31 @@ main {
     transform: translateY(-50%); /* Center vertically */
 }
 
-.magnitude-filter-label {
+.magnitude-filter-label 
+{
     display: inline-block; /* Ensure label occupies space */
     position: relative; /* Establish positioning context for absolute positioning */
     cursor: pointer; /* Change cursor on hover */
 }
 
-.magnitude-filter-label:hover .only-button {
+.magnitude-filter-label:hover .only-button 
+{
     display: inline-block; /* Show the "Only" button */
 }
 
-.dark-mode .only-button {
+.dark-mode .only-button 
+{
     background-color: #666;
     color: #fff;
 }
 
-.magnitude-filter {
+.magnitude-filter 
+{
     margin-right: 5px;
 }
 
-#statsContainer {
+#statsContainer 
+{
     flex: 1;
     max-width: 300px;
     margin-right: 20px;
@@ -68,7 +77,8 @@ main {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-#algorithmBox {
+#algorithmBox 
+{
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -82,23 +92,27 @@ main {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-#algorithmBox h2 {
+#algorithmBox h2 
+{
     color: #fff;
 }
 
-.radio-container {
+.radio-container 
+{
     display: flex;
     justify-content: center;
 }
 
-.radio-container label {
+.radio-container label 
+{
     display: block;
     margin-right: 20px;
     color: #ccc;
 }
 
 /* Runtime text styling */
-.runtime {
+.runtime 
+{
     display: block; /* Display as block to ensure each runtime appears on a new line */
     text-align: center; /* Center-align the text within the element */
     margin-top: 5px; /* Adjust top margin as needed */
@@ -106,7 +120,8 @@ main {
 }
 
 /* Button Styles */
-#generateButton {
+#generateButton 
+{
     padding: 10px 20px;
     font-size: 16px;
     border: none;
@@ -116,25 +131,27 @@ main {
     color: #fff;
     transition: background-color 0.3s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
-    /* Center the button */
     margin-top: 20px; /* Adjust the top margin for spacing */
 }
 
-.dark-mode #generateButton {
+.dark-mode #generateButton 
+{
     background-color: rgb(18, 108, 253);
 }
 
-.dark-mode #generateButton:hover {
+.dark-mode #generateButton:hover 
+{
     background-color: #333;
 }
 
-#generateButton:hover {
+#generateButton:hover 
+{
     background-color: #222;
 }
 
 /* Legend Container */
-#legendContainer {
+#legendContainer 
+{
     background-color: #333;
     border-radius: 8px;
     padding: 20px;
@@ -142,19 +159,22 @@ main {
 }
 
 /* Legend Title */
-#legendContainer h2 {
+#legendContainer h2 
+{
     margin-top: 0;
     color: #ffffff;
 }
 
 /* Legend Item */
-.legend-item {
+.legend-item 
+{
     margin-bottom: 10px;
     color: #ccc;
 }
 
 /* Legend Marker (Color Box) */
-.legend-marker {
+.legend-marker 
+{
     display: inline-block;
     width: 20px;
     height: 20px;
@@ -163,87 +183,102 @@ main {
 }
 
 /* Dark Mode Styles for Legend */
-.dark-mode #legendContainer {
+.dark-mode #legendContainer 
+{
     background-color: #222;
     color: #eee;
 }
 
-#mapContainer {
+#mapContainer 
+{
     flex: 2;
     max-width: calc(100% - 340px); /* Adjust width to fit remaining space */
     margin-right: 20px;
 }
 
-#map {
-    height: 1000px; /* Adjusted height for better viewing */
+#map 
+{
+    height: 1000px;
     width: 100%;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-#controlsContainer {
+#controlsContainer 
+{
     flex: 1;
     max-width: 300px;
 }
 
 #yearSliderContainer,
-#filterContainer {
+#filterContainer 
+{
     background-color: #333;
     border-radius: 8px;
     padding: 20px;
     margin-bottom: 20px;
 }
 
-h2 {
+h2 
+{
     margin-top: 0;
     color: #ffffff;
 }
 
-#yearSliderContainer {
+#yearSliderContainer 
+{
     background-color: #333;
     border-radius: 8px;
     padding: 20px;
     margin-bottom: 20px;
 }
 
-#yearSlider {
+#yearSlider 
+{
     width: 100%; /* Ensure the slider spans the container's width */
     margin-bottom: 30px; /* Adjust the margin-top to move the slider down */
 }
 
-#magnitudeFilters label {
+#magnitudeFilters label 
+{
     display: block;
     margin-bottom: 10px;
     color: #ccc;
 }
 
-#rankingTables {
+#rankingTables 
+{
     margin-top: 20px;
 }
 
-table {
+table 
+{
     width: 100%;
     border-collapse: collapse;
 }
 
-table, th, td {
+table, th, td 
+{
     border: 1px solid #666;
     padding: 12px;
     text-align: left;
 }
 
-th {
+th 
+{
     background-color: #555;
     color: #fff;
 }
 
 /* Dark Mode Styles */
-.dark-mode {
+.dark-mode 
+{
     background-color: #111;
     color: #eee;
 }
 
-.dark-mode header {
+.dark-mode header 
+{
     background-color: #222;
     color: #fff;
 }
@@ -251,32 +286,38 @@ th {
 .dark-mode #statsContainer,
 .dark-mode #yearSliderContainer,
 .dark-mode #filterContainer,
-.dark-mode #algorithmBox {
+.dark-mode #algorithmBox 
+{
     background-color: #222;
     color: #eee;
 }
 
-.dark-mode table {
+.dark-mode table 
+{
     border-color: #444;
 }
 
-.dark-mode th {
+.dark-mode th 
+{
     background-color: #333;
 }
 
-/* Custom CSS for Google Maps Info Window */
-.gm-style-iw {
-    color: #333; /* Default text color */
+/* Google Maps Info Window */
+.gm-style-iw 
+{
+    color: #333;
 }
 
 /* Dark Mode Styles for Info Window */
-.dark-mode .gm-style-iw {
-    color: #333; /* Text color in dark mode */
+.dark-mode .gm-style-iw 
+{
+    color: #333;
 }
 
 /* Modern Button Styles */
-button#darkModeToggle {
-    padding: 10px 20px; /* Adjusted padding for better sizing */
+button#darkModeToggle 
+{
+    padding: 10px 20px;
     font-size: 16px;
     border: none;
     border-radius: 4px;
@@ -286,15 +327,16 @@ button#darkModeToggle {
     transition: background-color 0.3s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
-    /* Modern font family */
-    font-family: 'Roboto', Arial, sans-serif; /* Use Google Font 'Roboto' or other modern font */
+    font-family: 'Roboto', Arial, sans-serif;
 }
 
-button#darkModeToggle:hover {
+button#darkModeToggle:hover 
+{
     background-color: #222; /* Darken hover color */
 }
 
-.earth-risk-title {
+.earth-risk-title 
+{
     color: #fff;
     font-size:  32px;
     margin: 0;

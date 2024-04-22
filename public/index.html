@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Earthquake Map</title>
     <link rel="stylesheet" href="styles.css">
-    <!-- Include Google Maps API with your API key -->
+    <!-- Google Map API -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBHBIIaxRnkkLvtY0mY1B8HmwNb91M9JcI&callback=initMap"
             async defer></script>
-    <!-- Include noUiSlider library -->
+    <!-- noUiSlider library -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.3/nouislider.min.js"></script>
-    <!-- Include your custom JavaScript files -->
+    <!-- JavaScript files -->
     <script src="script.js"></script>
 
 </head>
@@ -141,7 +141,8 @@
         const body = document.body;
 
         // Function to toggle dark mode
-        const toggleDarkMode = () => {
+        const toggleDarkMode = () => 
+        {
             body.classList.toggle('dark-mode');
             const isDarkMode = body.classList.contains('dark-mode');
             localStorage.setItem('darkMode', isDarkMode);
@@ -149,7 +150,8 @@
         };
 
         // Function to update toggle button text based on mode
-        const updateToggleText = (isDarkMode) => {
+        const updateToggleText = (isDarkMode) => 
+        {
             if (isDarkMode) {
                 darkModeToggle.textContent = 'Toggle Light Mode';
             } else {

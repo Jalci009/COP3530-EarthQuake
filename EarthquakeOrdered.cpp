@@ -6,20 +6,25 @@
 #include <map>
 #include <chrono>
 
-// Earthquake structure
-struct Earthquake {
-    std::string state;
+using namespace std;
+
+struct Earthquake 
+{
+    string state;
     double magnitude;
-    std::string data_type;
+    string data_type;
     double longitude;
     double latitude;
     int year;
 };
 
 // Function to validate if a state is in the list of valid states
-bool isValidState(const std::string& state, const std::vector<std::string>& validStatesList) {
-    for (const auto& validState : validStatesList) {
-        if (state == validState) {
+bool isValidState(const string& state, const vector<string>& validStatesList) 
+{
+    for (const auto& validState : validStatesList) 
+    {
+        if (state == validState) 
+        {
             return true;
         }
     }
@@ -27,50 +32,59 @@ bool isValidState(const std::string& state, const std::vector<std::string>& vali
 }
 
 // Function to read earthquake data from file and populate the map
-void readEarthquakeData(std::ifstream& file, std::map<std::string, std::vector<Earthquake>>& earthquakeMap, const std::vector<std::string>& validStatesList) {
-    std::string line;
-    std::getline(file, line); // Skip header line
+void readEarthquakeData(ifstream& file, map<string, vector<Earthquake>>& earthquakeMap, const vector<string>& validStatesList) 
+{
+    string line;
+    getline(file, line); // Skip header line
 
-    while (std::getline(file, line)) {
-        std::stringstream ss(line);
-        std::string field;
+    while (getline(file, line)) 
+    {
+        stringstream ss(line);
+        string field;
         Earthquake eq;
 
         // Read state (first column)
-        if (std::getline(ss, eq.state, ',')) {
+        if (getline(ss, eq.state, ',')) 
+        {
             eq.state.erase(0, eq.state.find_first_not_of(" \t\n\r\f\v"));
             eq.state.erase(eq.state.find_last_not_of(" \t\n\r\f\v") + 1);
         }
 
         // Read magnitude (second column)
-        if (std::getline(ss, field, ',')) {
-            eq.magnitude = std::stod(field);
+        if (getline(ss, field, ',')) 
+        {
+            eq.magnitude = stod(field);
         }
 
         // Read data type (third column)
-        if (std::getline(ss, eq.data_type, ',')) {
+        if (getline(ss, eq.data_type, ',')) 
+        {
             eq.data_type.erase(0, eq.data_type.find_first_not_of(" \t\n\r\f\v"));
             eq.data_type.erase(eq.data_type.find_last_not_of(" \t\n\r\f\v") + 1);
         }
 
         // Read longitude (fourth column)
-        if (std::getline(ss, field, ',')) {
-            eq.longitude = std::stod(field);
+        if (getline(ss, field, ',')) 
+        {
+            eq.longitude = stod(field);
         }
 
         // Read latitude (fifth column)
-        if (std::getline(ss, field, ',')) {
-            eq.latitude = std::stod(field);
+        if (getline(ss, field, ',')) 
+        {
+            eq.latitude = stod(field);
         }
 
         // Read year (sixth column)
-        if (std::getline(ss, field, ',')) {
-            std::string just_year = field.substr(0, 4);
-            eq.year = std::stoi(just_year);
+        if (getline(ss, field, ',')) 
+        {
+            string just_year = field.substr(0, 4);
+            eq.year = stoi(just_year);
         }
 
         // Check if earthquake data meets all criteria
-        if (eq.magnitude >= 2.0 && eq.data_type == "earthquake") {
+        if (eq.magnitude >= 2.0 && eq.data_type == "earthquake") 
+        {
             if (eq.state == "Georgia" && eq.latitude > 40)
                 continue;
 
@@ -81,36 +95,44 @@ void readEarthquakeData(std::ifstream& file, std::map<std::string, std::vector<E
 }
 
 // Function to write earthquake data to JSON file
-void writeEarthquakeDataToJson(std::ofstream& jsonFile, const std::map<std::string, std::vector<Earthquake>>& earthquakeMap, const std::vector<std::string>& validStatesList) {
+void writeEarthquakeDataToJson(ofstream& jsonFile, const map<string, vector<Earthquake>>& earthquakeMap, const vector<string>& validStatesList) 
+{
     bool firstState = true;
 
     jsonFile << "[\n";
 
-    for (const auto& entry : earthquakeMap) {
-        const std::string& state = entry.first;
-        const std::vector<Earthquake>& earthquakes = entry.second;
+    for (const auto& entry : earthquakeMap) 
+    {
+        const string& state = entry.first;
+        const vector<Earthquake>& earthquakes = entry.second;
 
         // Check if the state is within the valid states list
         if (!isValidState(state, validStatesList))
             continue;
 
         // If the state is Georgia and latitude is greater than 40, continue
-        if (state == "Georgia") {
+        if (state == "Georgia")
+        {
             bool isGeorgiaValid = false;
-            for (const auto& eq : earthquakes) {
-                if (eq.latitude > 40) {
+            for (const auto& eq : earthquakes) 
+            {
+                if (eq.latitude > 40) 
+                {
                     isGeorgiaValid = true;
                     break;
                 }
             }
-            if (isGeorgiaValid) {
+            if (isGeorgiaValid) 
+            {
                 continue;
             }
         }
 
         // Iterate over earthquakes in the vector and write to JSON
-        for (const auto& eq : earthquakes) {
-            if (!firstState) {
+        for (const auto& eq : earthquakes) 
+        {
+            if (!firstState) 
+            {
                 jsonFile << ",\n";
             }
             jsonFile << "    {\n";
@@ -127,18 +149,21 @@ void writeEarthquakeDataToJson(std::ofstream& jsonFile, const std::map<std::stri
     jsonFile << "\n]\n";
 }
 
-int main() {
-    std::ifstream file("earthquake_data.csv");
-    std::map<std::string, std::vector<Earthquake>> earthquakeMap;
+int main() 
+{
+    ifstream file("earthquake_data.csv");
+    map<string, vector<Earthquake>> earthquakeMap;
 
-    if (!file.is_open()) {
-        std::cerr << "Error opening file!" << std::endl;
+    if (!file.is_open()) 
+    {
+        cerr << "Error opening file!" << endl;
         return 1;
     }
 
 
     // List of valid states within the United States
-    static const std::vector<std::string> validStatesList = {
+    static const vector<string> validStatesList = 
+    {
         "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware",
         "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky",
         "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi",
@@ -148,14 +173,15 @@ int main() {
         "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"
     };
 
-    auto startTime = std::chrono::steady_clock::now();
+    auto startTime = chrono::steady_clock::now();
 
     readEarthquakeData(file, earthquakeMap, validStatesList);
 
 
-    std::ofstream jsonFile("public/earthquake_data.json");
-    if (!jsonFile.is_open()) {
-        std::cerr << "Error opening JSON file for writing!" << std::endl;
+    ofstream jsonFile("public/earthquake_data.json");
+    if (!jsonFile.is_open()) 
+    {
+        cerr << "Error opening JSON file for writing!" << endl;
         return 1;
     }
 
@@ -163,12 +189,11 @@ int main() {
 
     jsonFile.close();
     
-    auto endTime = std::chrono::steady_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime);
+    auto endTime = chrono::steady_clock::now();
+    auto duration = chrono::duration_cast<chrono::milliseconds>(endTime - startTime);
     
-    std::cout << "Runtime: " << duration.count() << " ms" << std::endl;
-    std::cout << "Successfully wrote filtered earthquake data to earthquake_data.json" << std::endl;
+    cout << "Runtime: " << duration.count() << " ms" << endl;
+    cout << "Successfully wrote filtered earthquake data to earthquake_data.json" << endl;
     
-
     return 0;
 }
