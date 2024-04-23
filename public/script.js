@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () =>
         executeEarthquakeExecutable();
     });
 
-    // Function to execute the earthquake executable based on selected algorithm
+    // Execute the earthquake executable based on selected algorithm
     function executeEarthquakeExecutable() 
     {
         const algorithm = document.querySelector('input[name="algorithm"]:checked').value;
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () =>
             });
     }
 
-    // Function to delete earthquake_data.json upon page reload
+    // Delete earthquake_data.json upon page reload
     window.addEventListener('beforeunload', () => 
     {
         // Make a POST request to delete earthquake_data.json
@@ -122,7 +122,6 @@ document.addEventListener('DOMContentLoaded', () =>
             checkbox.checked = isChecked;
         });
 
-        // Perform any desired actions after updating magnitude filters
         updateMagnitudeFilters();
     });
 

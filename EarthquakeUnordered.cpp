@@ -8,7 +8,6 @@
 
 using namespace std;
 
-// Earthquake structure
 struct Earthquake 
 {
     string state;
@@ -48,7 +47,7 @@ template<typename K, typename V>
 class HashMap 
 {
 private:
-    vector<list<HashNode<K, V>*>> table;  // Using list here
+    vector<list<HashNode<K, V>*>> table;  // Using list
     size_t size;
     size_t capacity;
     float loadFactor;
@@ -101,7 +100,7 @@ public:
         list.push_back(new HashNode<K, V>(key, value));  // Create a new node
         ++size;
 
-        // Check load factor and resize if necessary
+        // Check load factor and resize if needed
         if ((float)size / capacity > loadFactor) 
         {
             resizeTable();
@@ -190,7 +189,7 @@ public:
     }
 };
 
-// Function to read earthquake data from file and populate the hashmap
+// Read earthquake data from file and populate the hashmap
 void readEarthquakeData(const string& filename, HashMap<string, Earthquake>& earthquakeMap) 
 {
     ifstream file(filename);
@@ -261,7 +260,7 @@ void readEarthquakeData(const string& filename, HashMap<string, Earthquake>& ear
     file.close();
 }
 
-// Function to write filtered earthquake data to JSON file
+// Write filtered earthquake data to JSON file
 void writeFilteredEarthquakeDataToJson(const HashMap<string, Earthquake>& earthquakeMap, const string& filename) 
 {
     ofstream jsonFile(filename);
@@ -289,7 +288,8 @@ void writeFilteredEarthquakeDataToJson(const HashMap<string, Earthquake>& earthq
     // Iterate through the earthquake data in the HashMap
     for (const auto& bucket : earthquakeMap.getTable()) 
     {
-        for (const auto& nodePtr : bucket) {
+        for (const auto& nodePtr : bucket) 
+        {
             const auto& node = *nodePtr;  // Dereference the pointer
 
             // Check if the state is within the valid states list
@@ -310,7 +310,8 @@ void writeFilteredEarthquakeDataToJson(const HashMap<string, Earthquake>& earthq
             // Iterate over earthquakes in the vector and write to JSON
             for (const auto& eq : node.value) 
             {
-                if (!firstState) {
+                if (!firstState) 
+                {
                     jsonFile << ",\n";
                 }
                 jsonFile << "    {\n";

@@ -18,7 +18,7 @@ struct Earthquake
     int year;
 };
 
-// Function to validate if a state is in the list of valid states
+// Validate if the state is valid
 bool isValidState(const string& state, const vector<string>& validStatesList) 
 {
     for (const auto& validState : validStatesList) 
@@ -31,7 +31,7 @@ bool isValidState(const string& state, const vector<string>& validStatesList)
     return false;
 }
 
-// Function to read earthquake data from file and populate the map
+// Read earthquake data from file and populate the map
 void readEarthquakeData(ifstream& file, map<string, vector<Earthquake>>& earthquakeMap, const vector<string>& validStatesList) 
 {
     string line;
